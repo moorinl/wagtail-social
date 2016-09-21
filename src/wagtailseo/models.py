@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*- 
+
 from django.db import models
 from django.utils.translation import ugettext, ugettext_lazy
 from wagtail.contrib.settings.models import BaseSetting, register_setting
@@ -28,6 +30,9 @@ class SummaryCard(blocks.StructBlock):
     description = blocks.CharBlock(max_length=160, required=False)
     image = ImageChooserBlock(required=False)
 
+    class Meta:
+        template = 'wagtailseo/cards/summary.html'
+
 
 class SummaryLargeImageCard(SummaryCard):
     """Twitter Summary Card with large image
@@ -40,20 +45,36 @@ class SummaryLargeImageCard(SummaryCard):
         <meta name="twitter:description" content="NEWARK - The guest list and parade of limousines with celebrities emerging from them seemed more suited to a red carpet event in Hollywood or New York than than a gritty stretch of Sussex Avenue near the former site of the James M. Baxter Terrace public housing project here.">
         <meta name="twitter:image" content="http://graphics8.nytimes.com/images/2012/02/19/us/19whitney-span/19whitney-span-articleLarge.jpg">
     """
-    pass
+
+    class Meta:
+        template = 'wagtailseo/cards/summary_large_image.html'
 
 
-class AndroidAppBlock(blocks.StructBlock):
-    """Twitter Android (Google Play) Twitter Card specifications"""
-    app_id = blocks.CharBlock(max_length=255)
-    app_url = blocks.URLBlock()
+class GooglePlayAppBlock(blocks.StructBlock):
+    """Twitter Google Play Twitter Card specifications"""
+    name = blocks.CharBlock(max_length=255)
+    id = blocks.CharBlock(max_length=255)
+    url = blocks.CharBlock(max_length=255, required=False)
+
+    class Meta:
+        template = 'wagtailseo/cards/apps/google_play.html'
 
 
-class IOSAppBlock(blocks.StructBlock):
-    """Twitter iOS App Twitter Card specifications"""
-    app_country = blocks.CharBlock(max_length=2, min_length=2)
-    app_id = blocks.IntegerBlock()
-    app_url = blocks.URLBlock()
+class IPhoneAppBlock(blocks.StructBlock):
+    """Twitter iPhone App Twitter Card specifications"""
+    name = blocks.CharBlock(max_length=255)
+    id = blocks.IntegerBlock()
+    url = blocks.CharBlock(max_length=255, required=False)
+
+    class Meta:
+        template = 'wagtailseo/cards/apps/iphone.html'
+
+
+class IPadAppBlock(blocks.StructBlock):
+    """Twitter iPad App Twitter Card specifications"""
+
+    class Meta:
+        template = 'wagtailseo/cards/apps/ipad.html'
 
 
 class AppCard(blocks.StructBlock):
@@ -74,14 +95,18 @@ class AppCard(blocks.StructBlock):
         <meta name="twitter:app:id:googleplay" content="io.fabric.samples.cannonball">
         <meta name="twitter:app:url:googleplay" content="http://cannonball.fabric.io/poem/5149e249222f9e600a7540ef">
     """
-    site = blocks.CharBlock(max_length=15, required=True)
+    site = blocks.CharBlock(max_length=15, required=False)
     description = blocks.CharBlock(max_length=200, required=False)
+    country = blocks.CharBlock(max_length=2, min_length=2)
 
     apps = blocks.StreamBlock([
-        ('ipad', IOSAppBlock()),
-        ('iphone', IOSAppBlock()),
-        ('googleplay', AndroidAppBlock())
+        ('googleplay', GooglePlayAppBlock()),
+        ('iphone', IPhoneAppBlock()),
+        ('ipad', IPadAppBlock())
     ])
+
+    class Meta:
+        template = 'wagtailseo/cards/app.html'
 
 
 class TwitterCard(blocks.StreamBlock):

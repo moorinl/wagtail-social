@@ -1,0 +1,10 @@
+{% load wagtailimages_tags %}
+
+<meta name="twitter:card" content="summary" />
+{% if self.site %}<meta name="twitter:site" content="@{{ self.site }}" />{% endif %}
+{% if self.title %}<meta name="twitter:title" content="{{ self.title }}" />{% endif %}
+{% if self.description %}<meta name="twitter:description" content="{{ self.description }}" />{% endif %}
+{% if self.image %}
+    {% image self.image fill-120x120-c100 as app_image %}
+    <meta name="twitter:image" content="{{ app_image.url }}" />
+{% endif %}

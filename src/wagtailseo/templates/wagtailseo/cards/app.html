@@ -1,0 +1,7 @@
+<meta name="twitter:card" content="app" />
+{% if site %}<meta name="twitter:site" content="@{{ site }}" />{% endif %}
+{% if description %}<meta name="twitter:description" content="{{ description }}" />{% endif %}
+<meta name="twitter:app:country" content="{{ self.country|upper }}">
+{% for app in self.apps %}
+    {{ app }}
+{% endfor %}
